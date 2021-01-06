@@ -8,12 +8,16 @@ export default {
     isLoading: false,
     error: false,
     isTimeoutRunning: false,
+    icon: '',
+    isIconLoading: false,
+    isEmailLoading: false,
   },
   mutations: {
-    setUserData(state, data) {
+    setUserData(state, user) {
       state.error = false
-      state.email = data.email
-      state.id = data.id
+      state.email = user.email
+      state.id = user.id
+      state.icon = user.data.icon
     },
     setError(state, error) {
       state.error = error
@@ -28,6 +32,26 @@ export default {
     setLoading(state, loading) {
       state.isLoading = loading
     },
+    clearUserData(state) {
+      state.email = null
+      state.id = null
+      state.isLoading = false
+      state.error = false
+      state.isTimeoutRunning = false
+    },
+
+    setProfileIconLoading(state, isLoading) {
+      state.isIconLoading = isLoading
+    },
+    changeProfileIcon(state, newIcon) {
+      state.icon = newIcon
+    },
+    setUserEmailLoading(state, isLoading) {
+      state.isEmailLoading = isLoading
+    },
+    changeEmail(state, newEmail) {
+      state.email = newEmail
+    },
   },
   actions: {
     async registerUser(context) {
@@ -39,11 +63,46 @@ export default {
         commit('setLoading', true)
         const userData = await authApi.getUser(email, password)
         commit('setUserData', userData)
+        commit('setExpenses', userData.data)
         router.push('/user')
       } catch (err) {
         commit('setError', err)
       } finally {
         commit('setLoading', false)
+      }
+    },
+    async logOut({ commit }) {
+      try {
+        commit('setLoading', true)
+        await authApi.logOut()
+        router.push('/login')
+        commit('clearUserData')
+      } catch (err) {
+        commit('setError', 'Ошибка выхода')
+      } finally {
+        commit('setLoading', false)
+      }
+    },
+    async changeUserIcon({ commit }, { userId, icon }) {
+      try {
+        commit('setProfileIconLoading', true)
+        const newProfileIcon = await authApi.changeProfileIcon(userId, icon)
+        commit('changeProfileIcon', newProfileIcon)
+      } catch (err) {
+        commit('setError', 'Ошибка загрузки фото')
+      } finally {
+        commit('setProfileIconLoading', false)
+      }
+    },
+    async changeUserEmail({ commit }, email) {
+      try {
+        commit('setUserEmailLoading', true)
+        await authApi.changeEmail(email)
+        commit('changeEmail', email)
+      } catch (err) {
+        commit('setError', 'Ошибка при изменении email, возможно такой аккаунт уже существует')
+      } finally {
+        commit('setUserEmailLoading', false)
       }
     },
   },

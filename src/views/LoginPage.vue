@@ -34,7 +34,7 @@
         max-width="350px"
         class="mt-8"
         type="error"
-        :value="user.error"
+        :value="!!user.error"
         transition="scroll-y-transition"
       >
         {{ user.error }}
