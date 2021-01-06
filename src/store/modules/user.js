@@ -16,7 +16,7 @@ export default {
       state.id = data.id
     },
     setError(state, error) {
-      state.error = error
+      state.error = error.message
       if (!state.isTimeoutRunning) {
         state.isTimeoutRunning = true
         setTimeout(() => {
@@ -38,6 +38,18 @@ export default {
       try {
         commit('setLoading', true)
         const userData = await authApi.getUser(email, password)
+        commit('setUserData', userData)
+        router.push('/user')
+      } catch (err) {
+        commit('setError', err)
+      } finally {
+        commit('setLoading', false)
+      }
+    },
+    async addNewUser({ commit }, { email, password }) {
+      try {
+        commit('setLoading', true)
+        const userData = await authApi.registerNewUser(email, password)
         commit('setUserData', userData)
         router.push('/user')
       } catch (err) {
