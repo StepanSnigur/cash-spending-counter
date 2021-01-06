@@ -10,12 +10,11 @@ const authApi = {
     }
     const data = await app.auth().createUserWithEmailAndPassword(email, password)
     const userId = data.user.uid
-    const res = await app.firestore().collection('users').doc(userId).set(initialUserData)
-    console.log('new user: ', data, userId, res)
+    await app.firestore().collection('users').doc(userId).set(initialUserData)
     return {
       email,
       data: initialUserData,
-      is: userId,
+      id: userId,
     }
   },
 
