@@ -17,6 +17,10 @@
       <v-spacer></v-spacer>
 
       <v-btn
+        class="mr-5"
+        @click="goBack"
+      >Назад</v-btn>
+      <v-btn
         v-if="user.email"
         to="/user/info"
         height="auto"
@@ -44,6 +48,12 @@ export default {
     ...mapGetters([
       'user',
     ]),
+  },
+  methods: {
+    goBack() {
+      console.log('goback', this.$router);
+      this.$router.go(-1)
+    },
   },
 }
 </script>
