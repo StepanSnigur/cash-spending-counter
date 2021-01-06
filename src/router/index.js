@@ -4,6 +4,7 @@ import Home from '../views/Home.vue'
 import LoginPage from '../views/LoginPage.vue'
 import UserPage from '../views/UserPage.vue'
 import UserInfo from '../views/UserInfo.vue'
+import RegistrationPage from '../views/RegistrationPage.vue'
 
 Vue.use(VueRouter);
 
@@ -32,6 +33,11 @@ const routes = [
     path: '/user/info',
     name: 'UserInfo',
     component: UserInfo,
+  },
+  {
+    path: '/registration',
+    name: 'RegistrationPage',
+    component: RegistrationPage,
   },
 ]
 
