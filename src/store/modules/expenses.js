@@ -26,8 +26,9 @@ export default {
     },
   },
   actions: {
-    async addExpense({ commit, state, rootState }, { name, price }) {
+    async addExpense({ commit, state, rootState }, { name, price, date }) {
       try {
+        console.log(date, 'date')
         commit('startLoading')
         await userExpensesApi.addNewExpense(name, price, rootState.user.id, state.list)
         commit('addNewExpense', {
