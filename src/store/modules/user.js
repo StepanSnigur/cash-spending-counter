@@ -63,7 +63,13 @@ export default {
         commit('setLoading', true)
         const userData = await authApi.getUser(email, password)
         commit('setUserData', userData)
-        commit('setExpenses', userData.data)
+        commit('updateReplenishmentList', userData.data.replenishments)
+        commit('updateList', {
+          newExpensesList: userData.data.expences,
+          newBalance: userData.data.balance,
+          spent: userData.data.spent,
+          listName: 'list',
+        })
         router.push('/user')
       } catch (err) {
         commit('setError', err)
