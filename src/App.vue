@@ -18,6 +18,15 @@ export default {
     Header,
     LoadingBar,
   },
+  methods: {
+    setTheme() {
+      const theme = JSON.parse(localStorage.getItem('darkTheme')).isDarkTheme ?? false
+      this.$vuetify.theme.dark = theme
+    },
+  },
+  mounted() {
+    this.setTheme()
+  },
 };
 </script>
 
