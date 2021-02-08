@@ -1,9 +1,8 @@
 <template>
   <v-alert
-    style="position: absolute; top: 0"
     min-width="350px"
     max-width="350px"
-    class="mt-8"
+    class="alert-wrapper mt-8"
     type="error"
     :value="!!errorMessage"
     transition="scroll-y-transition"
@@ -20,3 +19,12 @@ export default {
   },
 }
 </script>
+
+<style scoped>
+.alert-wrapper {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+</style>

@@ -6,8 +6,8 @@ describe('Date parser', () => {
     const date = new Date()
     const hours = withZero(date.getHours())
     const minutes = withZero(date.getMinutes())
-    const day = date.getDate()
-    const month = date.getMonth() + 1
+    const day = withZero(date.getDate())
+    const month = withZero(date.getMonth() + 1)
     const year = date.getFullYear()
     const result = {
       hours,

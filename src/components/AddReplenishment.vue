@@ -7,10 +7,10 @@
     <v-dialog max-width="250" v-model="isModalOpen">
       <v-card class="d-flex flex-column pa-10">
         <h3></h3>
-        <v-text-field v-model="name" label="Название траты"></v-text-field>
-        <v-text-field v-model="price" label="Цена" type="number"></v-text-field>
+        <v-text-field v-model="name" label="Название прибавки"></v-text-field>
+        <v-text-field v-model="price" label="Сумма" type="number"></v-text-field>
         <v-btn
-          @click="addNewExpense"
+          @click="addNewReplenishment"
           class="mt-6"
           color="primary"
           :loading="isLoading"
@@ -25,7 +25,7 @@
       transition="scroll-y-transition"
       elevation="12"
       class="success-alert"
-    >Расходы обновлены</v-alert>
+    >Доходы обновлены</v-alert>
   </div>
 </template>
 
@@ -47,11 +47,11 @@ export default {
   },
   methods: {
     ...mapActions([
-      'addExpense',
+      'addReplenishment',
     ]),
-    async addNewExpense() {
+    async addNewReplenishment() {
       this.isLoading = true
-      await this.addExpense({
+      await this.addReplenishment({
         name: this.name,
         price: this.price,
         date: dateParser(new Date()),
