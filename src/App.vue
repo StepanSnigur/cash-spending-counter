@@ -11,6 +11,7 @@
 <script>
 import Header from './components/Header.vue'
 import LoadingBar from './components/LoadingBar.vue'
+import ThemeManager from './utils/themeManager'
 
 export default {
   name: 'App',
@@ -18,14 +19,9 @@ export default {
     Header,
     LoadingBar,
   },
-  methods: {
-    setTheme() {
-      const theme = JSON.parse(localStorage.getItem('darkTheme')).isDarkTheme ?? false
-      this.$vuetify.theme.dark = theme
-    },
-  },
   mounted() {
-    this.setTheme()
+    // eslint-disable-next-line no-new
+    new ThemeManager(this.$vuetify).setThemeFromLocalStorage()
   },
 };
 </script>

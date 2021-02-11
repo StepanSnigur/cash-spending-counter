@@ -12,6 +12,7 @@
 
 <script>
 import SettingElement from './SettingElement.vue'
+import ThemeManager from '../../utils/themeManager'
 
 const getSystemTheme = () => window.matchMedia('(prefers-color-scheme: dark)').matches
 
@@ -42,8 +43,7 @@ export default {
   methods: {
     handleThemeChange(value) {
       const currentTheme = this.themes.find((theme) => theme.title === value)
-      this.$vuetify.theme.dark = currentTheme.isDarkTheme
-      localStorage.setItem('darkTheme', JSON.stringify(currentTheme))
+      new ThemeManager(this.$vuetify).changeTheme(currentTheme)
     },
   },
 }
