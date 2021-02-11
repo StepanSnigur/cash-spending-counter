@@ -2,6 +2,7 @@
   <v-container
     style="min-height: 100%"
     class="d-flex align-center justify-center"
+    dark
   >
     <v-form
       @submit.prevent="handleFormSubmit"

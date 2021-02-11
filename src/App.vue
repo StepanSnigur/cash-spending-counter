@@ -11,12 +11,17 @@
 <script>
 import Header from './components/Header.vue'
 import LoadingBar from './components/LoadingBar.vue'
+import ThemeManager from './utils/themeManager'
 
 export default {
   name: 'App',
   components: {
     Header,
     LoadingBar,
+  },
+  mounted() {
+    // eslint-disable-next-line no-new
+    new ThemeManager(this.$vuetify).setThemeFromLocalStorage()
   },
 };
 </script>
