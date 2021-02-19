@@ -20,11 +20,11 @@ export default {
     placeholder: String,
     type: String,
     value: [Array, Boolean],
-    defaultTheme: String,
+    defaultTheme: Object,
   },
   data() {
     return {
-      theme: JSON.parse(localStorage.getItem('darkTheme')).title || this.defaultTheme,
+      theme: JSON.parse(localStorage.getItem('appTheme'))?.title || this.defaultTheme.title,
     }
   },
   methods: {

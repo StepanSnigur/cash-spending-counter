@@ -1,4 +1,5 @@
 import app from 'firebase/app'
+import userExpensesApi from './userExpensesApi'
 
 const authApi = {
   async registerNewUser(email, password) {
@@ -21,6 +22,7 @@ const authApi = {
   async getUser(email, password) {
     const res = await app.auth().signInWithEmailAndPassword(email, password)
     const userId = res.user.uid
+    await userExpensesApi.checkIsExpensesExpired(userId)
     const user = await app.firestore().collection('users').doc(userId).get()
     return {
       email,

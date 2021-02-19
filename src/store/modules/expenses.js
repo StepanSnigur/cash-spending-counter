@@ -7,6 +7,7 @@ export default {
     list: [],
     replenishmentList: [],
     isListLoading: false,
+    expiresIn: null,
     spent: 0,
     isLoading: false,
     error: false,
@@ -28,6 +29,9 @@ export default {
       state[listName] = newExpensesList
       state.balance = newBalance
       state.spent = spent
+    },
+    updateExpirationDate(state, expirationDate) {
+      state.expiresIn = expirationDate
     },
     updateReplenishmentList(state, newReplenishmentList) {
       state.replenishmentList = newReplenishmentList

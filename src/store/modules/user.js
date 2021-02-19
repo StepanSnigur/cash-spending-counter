@@ -62,6 +62,7 @@ export default {
       try {
         commit('setLoading', true)
         const userData = await authApi.getUser(email, password)
+        // await userExpensesApi.checkIsExpensesExpired(userData.id)
         commit('setUserData', userData)
         commit('updateReplenishmentList', userData.data.replenishments)
         commit('updateList', {
@@ -70,6 +71,7 @@ export default {
           spent: userData.data.spent,
           listName: 'list',
         })
+        commit('updateExpirationDate', userData.data.expiresIn)
         router.push('/user')
       } catch (err) {
         commit('setError', err)

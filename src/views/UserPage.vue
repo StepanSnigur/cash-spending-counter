@@ -1,7 +1,8 @@
 <template>
   <v-container max-width="900">
-    <h2>Осталось: {{ expenses.balance }}</h2>
-    <h2>Потрачено: {{ expenses.spent }}</h2>
+    <h2>Осталось: {{ expenses.balance }} руб.</h2>
+    <h2>Потрачено: {{ expenses.spent }} руб.</h2>
+    <h5>Новый расчетный период начнется: {{ expirationDate }}</h5>
 
     <div class="user-lists-wrapper">
       <div>
@@ -76,6 +77,11 @@ export default {
       'expenses',
       'user',
     ]),
+    expirationDate() {
+      const date = new Date(this.expenses.expiresIn)
+      const monthName = date.toLocaleString('default', { month: 'long' })
+      return `${monthName}, ${date.getDate()}`
+    },
   },
 }
 </script>

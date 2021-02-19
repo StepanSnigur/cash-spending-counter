@@ -20,7 +20,10 @@ export default {
   name: 'Settings',
   data() {
     return {
-      defaultTheme: 'Светлая',
+      defaultTheme: {
+        title: 'Светлая',
+        isDarkTheme: false,
+      },
       themes: [
         {
           title: 'Светлая',
