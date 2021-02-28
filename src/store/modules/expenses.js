@@ -1,11 +1,16 @@
 import { v4 as uuidv4 } from 'uuid'
 import userExpensesApi from '../../api/userExpensesApi'
+import sorter from '../../utils/sorter'
 
 export default {
   state: {
     balance: 0,
     list: [],
     replenishmentList: [],
+    sortingData: {
+      expensesListSortField: 'date',
+      replenishmentListSortField: 'date',
+    },
     isListLoading: false,
     expiresIn: null,
     spent: 0,
@@ -16,6 +21,9 @@ export default {
     addNewExpense(state, newExpense) {
       state.list.push(newExpense)
       state.isLoading = false
+    },
+    setNewListOrder(state, { sortFieldName, sortField }) {
+      state.sortingData[sortFieldName] = sortField
     },
     updateList(
       state,
@@ -229,10 +237,28 @@ export default {
         commit('setLoadingBarState', false)
       }
     },
+    sortList({ commit }, { sortFieldName, sortField }) {
+      commit('setNewListOrder', {
+        sortFieldName,
+        sortField,
+      })
+    },
   },
   getters: {
     expenses(state) {
       return state
     },
+    getSortedList: (state) => (listName, sortDataName) => {
+      const listToSort = [...state[listName]]
+      const fieldName = state.sortingData[sortDataName]
+      let sortedList
+      if (fieldName === 'name') sortedList = listToSort.sort((a, b) => sorter.sortByAlphabet(a.name, b.name))
+      else if (fieldName === 'date') sortedList = listToSort.sort((a, b) => sorter.sortByDate(a.date, b.date))
+      else if (fieldName === 'price') sortedList = listToSort.sort((a, b) => sorter.sortByPrice(a.price, b.price))
+      return sortedList
+    },
+    // getSortedExpenses(state) {
+
+    // },
   },
 }
