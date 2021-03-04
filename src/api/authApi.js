@@ -1,4 +1,5 @@
 import app from 'firebase/app'
+import api from './apiManager'
 import userExpensesApi from './userExpensesApi'
 
 const authApi = {
@@ -11,7 +12,7 @@ const authApi = {
     }
     const data = await app.auth().createUserWithEmailAndPassword(email, password)
     const userId = data.user.uid
-    await app.firestore().collection('users').doc(userId).set(initialUserData)
+    await api.searchUser(userId).set(initialUserData)
     return {
       email,
       data: initialUserData,
@@ -23,7 +24,7 @@ const authApi = {
     const res = await app.auth().signInWithEmailAndPassword(email, password)
     const userId = res.user.uid
     await userExpensesApi.checkIsExpensesExpired(userId)
-    const user = await app.firestore().collection('users').doc(userId).get()
+    const user = await api.searchUser(userId).get()
     return {
       email,
       data: user.data(),
@@ -41,11 +42,7 @@ const authApi = {
     const iconRef = await storageRef.put(icon)
     const iconDownloadUrl = await iconRef.ref.getDownloadURL()
 
-    await app
-      .firestore()
-      .collection('users')
-      .doc(userId)
-      .update({ icon: iconDownloadUrl })
+    await api.searchUser(userId).update({ icon: iconDownloadUrl })
     return iconDownloadUrl
   },
   async changeEmail(newEmail) {

@@ -1,9 +1,9 @@
-import app from 'firebase/app'
+import api from './apiManager'
 
 const userExpensesApi = {
   async checkIsExpensesExpired(userId) {
     const dateNow = new Date().getTime()
-    const expensesExpirationTime = await (await app.firestore().collection('users').doc(userId).get()).data().expiresIn
+    const expensesExpirationTime = await (await api.searchUser(userId).get()).data().expiresIn
     if (!expensesExpirationTime) {
       await this.setNewExpirationTime()
     } else if (dateNow >= expensesExpirationTime) {
@@ -14,12 +14,12 @@ const userExpensesApi = {
   async setNewExpirationTime(userId) {
     const expirationDate = new Date()
     expirationDate.setMonth(expirationDate.getMonth() + 1)
-    await app.firestore().collection('users').doc(userId).update({
+    await api.searchUser(userId).update({
       expiresIn: expirationDate.getTime(),
     })
   },
   async updateListsAfterExpiration(userId) {
-    const oldExpenses = await app.firestore().collection('users').doc(userId).get()
+    const oldExpenses = await api.searchUser(userId).get()
     const prevSpent = await oldExpenses.data()
 
     const expireDate = new Date(prevSpent.expiresIn)
@@ -36,7 +36,8 @@ const userExpensesApi = {
   },
   async updateExpenses(userId, newExpenseList, spent, currentBalance) {
     if (!spent || !currentBalance) throw new Error('Error in "updateExpenses", spent or current balance is not defined')
-    await app.firestore().collection('users').doc(userId).update({
+    console.log(api)
+    await api.searchUser(userId).update({
       expences: newExpenseList,
       balance: currentBalance,
       spent,
@@ -44,13 +45,13 @@ const userExpensesApi = {
   },
   async updateReplenishments(userId, newReplenishmentsList, currentBalance) {
     if (!currentBalance) throw new Error('Error in "updateReplenishments", current balance is not defined')
-    await app.firestore().collection('users').doc(userId).update({
+    await api.searchUser(userId).update({
       replenishments: newReplenishmentsList,
       balance: currentBalance,
     })
   },
   async clearExpensesData(userId, updatedPrevExpenses, newExpireDate) {
-    await app.firestore().collection('users').doc(userId).update({
+    await api.searchUser(userId).update({
       replenishments: [],
       expences: [],
       balance: 0,
