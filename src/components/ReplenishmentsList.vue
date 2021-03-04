@@ -3,11 +3,12 @@
     <div class="list-headline-wrapper">
       <h1 class="text-center mr-5">Список пополнений:</h1>
       <AddReplenishment />
+      <SearchInLIst searchListName="replenishmentList" />
       <ListsSorter @onChangeSortMethod="handleChangeReplenishmentsSortMethod" />
     </div>
     <div v-if="expenses.replenishmentList.length" class="expenses-list mt-6">
       <div
-        v-for="item in getSortedList('replenishmentList', 'replenishmentListSortField')"
+        v-for="item in getSortedList('replenishmentList')"
         :key="item.id"
       >
         <ExpenseCard
@@ -30,17 +31,19 @@
 <script>
 import ListMixin from './mixins/ListMixin'
 import AddReplenishment from './AddReplenishment.vue'
+import SearchInLIst from './SearchInList.vue'
 
 export default {
   name: 'ReplenishmentsList',
   mixins: [ListMixin],
   components: {
     AddReplenishment,
+    SearchInLIst,
   },
   methods: {
     handleChangeReplenishmentsSortMethod({ fieldName }) {
       this.sortList({
-        sortFieldName: 'replenishmentListSortField',
+        listName: 'replenishmentList',
         sortField: fieldName,
       })
     },

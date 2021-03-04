@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters } from 'vuex'
 import ExpensesList from '../components/ExpensesList.vue'
 import ReplenishmentsList from '../components/ReplenishmentsList.vue'
 import ErrorAlert from '../components/ErrorAlert.vue'
@@ -38,21 +38,6 @@ export default {
       const date = new Date(this.expenses.expiresIn)
       const monthName = date.toLocaleString('default', { month: 'long' })
       return `${monthName}, ${date.getDate()}`
-    },
-  },
-  methods: {
-    ...mapActions(['sortList']),
-    handleChangeExpensesSortMethod({ fieldName }) {
-      this.sortList({
-        sortFieldName: 'expensesListSortField',
-        sortField: fieldName,
-      })
-    },
-    handleChangeReplenishmentsSortMethod({ fieldName }) {
-      this.sortList({
-        sortFieldName: 'replenishmentListSortField',
-        sortField: fieldName,
-      })
     },
   },
 }

@@ -7,7 +7,7 @@
     :value="!!errorMessage"
     transition="scroll-y-transition"
   >
-    {{ errorMessage }}
+    {{ errorMessage || '' }}
   </v-alert>
 </template>
 

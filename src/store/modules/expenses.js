@@ -5,11 +5,17 @@ import sorter from '../../utils/sorter'
 export default {
   state: {
     balance: 0,
-    list: [],
+    expenseList: [],
     replenishmentList: [],
     sortingData: {
-      expensesListSortField: 'date',
-      replenishmentListSortField: 'date',
+      expenseList: {
+        field: 'date',
+        term: '',
+      },
+      replenishmentList: {
+        field: 'date',
+        term: '',
+      },
     },
     isListLoading: false,
     expiresIn: null,
@@ -19,11 +25,14 @@ export default {
   },
   mutations: {
     addNewExpense(state, newExpense) {
-      state.list.push(newExpense)
+      state.expenseList.push(newExpense)
       state.isLoading = false
     },
-    setNewListOrder(state, { sortFieldName, sortField }) {
-      state.sortingData[sortFieldName] = sortField
+    setNewListOrder(state, { listName, sortField }) {
+      state.sortingData[listName].field = sortField
+    },
+    setNewSortTerm(state, { listName, newSortTerm }) {
+      state.sortingData[listName].term = newSortTerm
     },
     updateList(
       state,
@@ -31,7 +40,7 @@ export default {
         newExpensesList,
         newBalance,
         spent,
-        listName = 'list',
+        listName = 'expenseList',
       },
     ) {
       state[listName] = newExpensesList
@@ -64,7 +73,7 @@ export default {
         const expenseId = uuidv4()
 
         const newExpensesList = [
-          ...state.list,
+          ...state.expenseList,
           {
             name,
             price,
@@ -85,7 +94,7 @@ export default {
           newExpensesList,
           newBalance,
           spent,
-          listName: 'list',
+          listName: 'expenseList',
         })
       } catch (e) {
         console.log(e)
@@ -98,16 +107,16 @@ export default {
       try {
         commit('setLoadingBarState', true)
 
-        const newExpensesList = state.list.filter((el) => el.id !== id)
+        const newExpensesList = state.expenseList.filter((el) => el.id !== id)
         const spent = newExpensesList.reduce((acc, i) => acc + +i.price, 0)
-        const newBalance = +state.balance + +state.list.find((el) => el.id === id).price
+        const newBalance = +state.balance + +state.expenseList.find((el) => el.id === id).price
 
         await userExpensesApi.updateExpenses(rootState.user.id, newExpensesList, spent, newBalance)
         commit('updateList', {
           newExpensesList,
           newBalance,
           spent,
-          listName: 'list',
+          listName: 'expenseList',
         })
       } catch (e) {
         console.log('error', e)
@@ -120,7 +129,7 @@ export default {
       try {
         commit('setLoadingBarState', true)
 
-        const newExpensesList = [...state.list]
+        const newExpensesList = [...state.expenseList]
         const expenseIndexToChange = newExpensesList.findIndex((expense) => expense.id === id)
         newExpensesList[expenseIndexToChange] = {
           ...newExpensesList[expenseIndexToChange],
@@ -136,7 +145,7 @@ export default {
           newExpensesList,
           newBalance,
           spent,
-          listName: 'list',
+          listName: 'expenseList',
         })
       } catch (e) {
         console.log('error', e)
@@ -237,10 +246,16 @@ export default {
         commit('setLoadingBarState', false)
       }
     },
-    sortList({ commit }, { sortFieldName, sortField }) {
+    sortList({ commit }, { listName, sortField }) {
       commit('setNewListOrder', {
-        sortFieldName,
+        listName,
         sortField,
+      })
+    },
+    changeSortTerm({ commit }, { listName, newSortTerm }) {
+      commit('setNewSortTerm', {
+        listName,
+        newSortTerm,
       })
     },
   },
@@ -248,17 +263,18 @@ export default {
     expenses(state) {
       return state
     },
-    getSortedList: (state) => (listName, sortDataName) => {
+    getSortedList: (state) => (listName) => {
       const listToSort = [...state[listName]]
-      const fieldName = state.sortingData[sortDataName]
-      let sortedList
-      if (fieldName === 'name') sortedList = listToSort.sort((a, b) => sorter.sortByAlphabet(a.name, b.name))
-      else if (fieldName === 'date') sortedList = listToSort.sort((a, b) => sorter.sortByDate(a.date, b.date))
-      else if (fieldName === 'price') sortedList = listToSort.sort((a, b) => sorter.sortByPrice(a.price, b.price))
-      return sortedList
-    },
-    // getSortedExpenses(state) {
+      const { field, term } = state.sortingData[listName]
 
-    // },
+      let sortedList = listToSort
+      if (field === 'name') sortedList = listToSort.sort((a, b) => sorter.sortByAlphabet(a.name, b.name))
+      else if (field === 'date') sortedList = listToSort.sort((a, b) => sorter.sortByDate(a.date, b.date))
+      else if (field === 'price') sortedList = listToSort.sort((a, b) => sorter.sortByPrice(a.price, b.price))
+
+      return sortedList.filter((el) => el.name.includes(term))
+    },
+    searchData: (state) => state.sortingData,
+    getSearchTerm: (state) => (listName) => state.sortingData[listName]?.term,
   },
 }
