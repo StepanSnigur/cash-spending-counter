@@ -2,6 +2,7 @@
   <v-container
     style="min-height: 100%"
     class="d-flex align-center justify-center"
+    dark
   >
     <v-form
       @submit.prevent="handleFormSubmit"
@@ -28,23 +29,14 @@
       <h5 class="ml-auto mr-auto mt-3">
         У вас нет аккаунта? <v-btn text small to="/registration">Зарегитрируйтесь!</v-btn>
       </h5>
-      <v-alert
-        style="position: absolute; top: 0"
-        min-width="350px"
-        max-width="350px"
-        class="mt-8"
-        type="error"
-        :value="!!user.error"
-        transition="scroll-y-transition"
-      >
-        {{ user.error }}
-      </v-alert>
+      <ErrorAlert :errorMessage="user.error" />
     </v-form>
   </v-container>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import ErrorAlert from '../components/ErrorAlert.vue'
 
 // eslint-disable-next-line no-useless-escape
 export const emailRegExp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -83,6 +75,9 @@ export default {
       this.isEmailCorrect = false
       return 'Email некорректен'
     },
+  },
+  components: {
+    ErrorAlert,
   },
 }
 </script>

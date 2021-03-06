@@ -12,7 +12,7 @@
       > mdi-arrow-left</v-icon>
       Назад
     </v-btn>
-    <v-row align="center">
+    <v-row align="center" class="user-info pb-7 mb-4">
       <div class="profile-image">
         <v-img
           class="profile-icon"
@@ -41,6 +41,7 @@
       <v-spacer />
       <v-btn @click="logOut" :loading="user.isLoading" color="error" dark>Выйти</v-btn>
     </v-row>
+    <Settings />
     <v-dialog max-width="450" v-model="changingProfileIcon">
       <v-card class="pb-5">
         <v-card-title>Сменить изображение профиля</v-card-title>
@@ -91,6 +92,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import Settings from '../components/UserSettings/Settings.vue'
 
 export default {
   name: 'UserInfo',
@@ -131,12 +133,18 @@ export default {
       this.changingEmail = false
     },
   },
+  components: {
+    Settings,
+  },
 }
 </script>
 
 <style scoped>
 .container {
   width: 700px;
+}
+.user-info {
+  border-bottom: 1px solid #000;
 }
 .profile-image {
   position: relative;
