@@ -47,6 +47,8 @@ export default {
 .user-lists-wrapper {
   display: flex;
   justify-content: space-between;
+  border-top: 1px solid #000;
+  margin-top: 50px;
 }
 .user-lists-wrapper > div {
   width: 50%;

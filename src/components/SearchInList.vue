@@ -12,6 +12,7 @@
         <v-text-field
           label="Название карточки"
           @input="handleInputChange"
+          @keydown.enter.prevent="hideModal"
           :value="getSearchTerm(searchListName)"
           outlined
         ></v-text-field>
@@ -32,6 +33,10 @@ export default {
     ...mapActions(['changeSortTerm']),
     openModal() {
       this.isModalOpen = true
+    },
+    hideModal() {
+      console.log('hide')
+      this.isModalOpen = false
     },
     handleInputChange(value) {
       this.changeSortTerm({
