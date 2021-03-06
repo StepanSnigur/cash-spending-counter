@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="list-wrapper">
     <div class="list-headline-wrapper">
       <h1 class="text-center mr-5">Список трат:</h1>
       <AddExpense />
@@ -49,6 +49,9 @@ export default {
 </script>
 
 <style scoped>
+.list-wrapper {
+  padding-top: 30px;
+}
 .list-headline-wrapper {
   display: flex;
   justify-content: center;
